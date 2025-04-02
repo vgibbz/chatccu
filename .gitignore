@@ -1,8 +1,7 @@
 .venv/
-config.toml
-secrets.toml
+.streamlit/config.toml
+.streamlit/secrets.toml
 __pycache__/
 *.pyc
 *.pyo
 .DS_Store
-storage/
