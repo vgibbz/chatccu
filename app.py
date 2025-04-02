@@ -67,12 +67,10 @@ custom_template = PromptTemplate(
 @st.cache_resource
 def load_index():
     if not os.path.exists(PERSIST_DIR):
-        docs = SimpleDirectoryReader(DATA_DIR).load_data()
-        for doc in docs:
-            path = doc.metadata.get("file_path", "")
-            doc.metadata["file_name"] = os.path.basename(path)
+        from llama_index.core.node_parser import SentenceSplitter
+        documents = SimpleDirectoryReader(DATA_DIR).load_data()
         splitter = SentenceSplitter(chunk_size=512, chunk_overlap=64)
-        nodes = splitter.get_nodes_from_documents(docs)
+        nodes = splitter.get_nodes_from_documents(documents)
 
         index = VectorStoreIndex(nodes, show_progress=True)
         index.storage_context.persist(persist_dir=PERSIST_DIR)
