@@ -66,7 +66,9 @@ custom_template = PromptTemplate(
 # Load or build index
 @st.cache_resource
 def load_index():
-    if not os.path.exists(PERSIST_DIR):
+    index_file_path = os.path.join(PERSIST_DIR, "default__vector_store.json")
+    
+    if not os.path.exists(index_file_path):
         from llama_index.core.node_parser import SentenceSplitter
         documents = SimpleDirectoryReader(DATA_DIR).load_data()
         splitter = SentenceSplitter(chunk_size=512, chunk_overlap=64)

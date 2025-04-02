@@ -1,5 +1,7 @@
-.venv
+.venv/
 config.toml
 secrets.toml
 __pycache__/
-storage/
+*.pyc
+*.pyo
+.DS_Store
