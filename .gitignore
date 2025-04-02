@@ -2,3 +2,4 @@
 config.toml
 secrets.toml
 __pycache__/
+storage/
