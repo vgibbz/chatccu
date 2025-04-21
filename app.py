@@ -55,7 +55,7 @@ custom_template = PromptTemplate(
     "Use only the context below to answer the question.\n"
     "If listing items, format them as bullet points using markdown (- Item 1, - Item 2, etc).\n"
     "Always cite the document name and page number like this: (DocumentName, page X).\n"
-    "If the answer is not in the context, say 'I don't know the answer.' Do not guess.\n\n"
+    "If the answer is not in the context, say 'I'm sorry, I don't know the answer.' Do not guess.\n\n"
     "Question: {query_str}\n"
     "---------------------\n"
     "{context_str}\n"
@@ -87,7 +87,34 @@ bm25_retriever = BM25Retriever.from_defaults(index=index, similarity_top_k=10)
 
 # Routing logic
 def get_retriever_for_query(query: str):
-    sparse_keywords = ["email", "form", "ferpa", "gpa", "deadline"]
+    sparse_keywords = [
+    # Contact & identity
+    "email", "phone", "contact", "address", "advisor", "name", "who is", "professor",
+
+    # Student records & privacy
+    "ferpa", "transcript", "grades", "gpa", "academic standing", "withdrawal", "suspension", "reinstatement",
+
+    # Registration & planning
+    "form", "forms", "schedule", "calendar", "registration", "course", "credit", "prerequisite", "degree audit", "catalog",
+
+    # Graduation & ceremonies
+    "graduation", "commencement", "regalia", "honors", "cords", "hood", "diploma", "application for graduation",
+
+    # Deadlines & timing
+    "deadline", "due", "last day", "date", "drop", "refund", "start", "end",
+
+    # Financial topics
+    "financial", "tuition", "fees", "bill", "payment", "aid", "loans", "scholarship", "grant", "fafsa", "refund", "cost",
+
+    # Housing, campus life & safety
+    "housing", "residence", "dining", "meal", "chapel", "security", "emergency", "health", "counseling", "support",
+
+    # Student services & academic help
+    "tutoring", "accommodations", "disability", "writing center", "career", "library", "student services",
+
+    # Policy & conduct
+    "policy", "appeal", "discipline", "violation", "plagiarism", "attendance", "academic integrity"
+    ]
     if any(kw in query.lower() for kw in sparse_keywords):
         return bm25_retriever
     return vector_retriever
@@ -189,7 +216,3 @@ if query:
                 st.error(f"Failed to save feedback: {e}")
         else:
             st.warning("Please type something before submitting.")
-
-
-
-
